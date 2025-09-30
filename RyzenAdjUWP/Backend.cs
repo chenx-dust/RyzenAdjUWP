@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Reflection.PortableExecutable;
+using System.Security.Principal;
 using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Background;
 using Windows.Foundation.Collections;
+using Windows.Media.Protection.PlayReady;
 using Windows.Security.Authentication.Web;
 using Windows.Storage;
 using Windows.UI.Core;
@@ -21,61 +23,66 @@ namespace RyzenAdjUWP
 {
     internal class Backend
     {
-        private AppServiceConnection _appServiceConnection;
-        private BackgroundTaskDeferral _appServiceDeferral;
-
-        public event EventHandler<ValueSet> MessageReceivedEvent;
+        public event EventHandler<string> MessageReceivedEvent;
+        public event EventHandler ClosedOrFailedEvent;
 
         private static Backend _instance;
         public static Backend Instance => _instance ?? (_instance = new Backend());
 
-        private Backend() {}
+        private NamedPipeClientStream client;
+        private StreamReader reader;
+        private StreamWriter writer;
+        private Task runningThread;
+
+        public bool IsConnected => client.IsConnected;
+
+        private Backend()
+        {
+            client = new NamedPipeClientStream(".", @"LOCAL\RyzenAdjPipe",
+                PipeDirection.InOut, PipeOptions.Asynchronous);
+
+            reader = new StreamReader(client);
+            writer = new StreamWriter(client);
+
+            runningThread = Task.Run(Loop);
+        }
 
         public static async Task LaunchBackend()
         {
+            ApplicationData.Current.LocalSettings.Values["PackageSid"] = WebAuthenticationBroker.GetCurrentApplicationCallbackUri().Host.ToUpper();
+            ApplicationData.Current.LocalSettings.Values["UserSid"] = WindowsIdentity.GetCurrent().Owner.Value;
             await FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync();
         }
 
-        public void OnBackgroundActivated(IBackgroundTaskInstance taskInstance)
+        private void Loop()
         {
-            AppServiceTriggerDetails appService = taskInstance.TriggerDetails as AppServiceTriggerDetails;
-            _appServiceDeferral = taskInstance.GetDeferral();
-            _appServiceConnection = appService.AppServiceConnection;
-            _appServiceConnection.RequestReceived += OnAppServiceRequestReceived;
-            _appServiceConnection.ServiceClosed += AppServiceConnection_ServiceClosed;
-        }
-
-        private void OnAppServiceRequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
-        {
-            AppServiceDeferral messageDeferral = args.GetDeferral();
-            MessageReceivedEvent?.Invoke(this, args.Request.Message);
-            messageDeferral.Complete();
-        }
-
-        private void AppServiceConnection_ServiceClosed(AppServiceConnection sender, AppServiceClosedEventArgs args)
-        {
-            Debug.WriteLine("[Connection] Service closed");
-            _appServiceConnection.Dispose();
-            _appServiceConnection = null;
-            _appServiceDeferral.Complete();
-        }
-
-        public async Task<AppServiceResponse> SendRequestAsync(ValueSet valueSet)
-        {
-            if (_appServiceConnection == null)
+            while (true)
             {
-                Debug.WriteLine("[Connection] No active connection");
-                return null;
+                if (!client.IsConnected)
+                {
+                    ClosedOrFailedEvent.Invoke(this, null);
+                    client.Connect();
+                }
+                try
+                {
+                    string message = reader.ReadLine();
+                    if (message != null)
+                        MessageReceivedEvent.Invoke(this, message);
+                }
+                catch { }
             }
+        }
 
+        public void Send(string message)
+        {
             try
             {
-                return await _appServiceConnection.SendMessageAsync(valueSet);
+                writer.WriteLine(message);
+                writer.Flush();
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine($"[Connection] Send message failed: {ex.Message}");
-                return null;
+                ClosedOrFailedEvent.Invoke(this, null);
             }
         }
     }

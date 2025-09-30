@@ -32,16 +32,46 @@ namespace RyzenAdjUWP
         public MainPage()
         {
             InitializeComponent();
+            Backend.Instance.MessageReceivedEvent += Backend_OnMessageReceived;
+            Backend.Instance.ClosedOrFailedEvent += Backend_OnClosedOrFailed;
+            PanelSwitch(Backend.Instance.IsConnected);
+        }
+
+        private void Backend_OnMessageReceived(object sender, string message)
+        {
+            string[] args = message.Split(' ');
+            if (args.Length == 0)
+                return;
+            switch (message)
+            {
+                case "pong":
+                    _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => PanelSwitch(true));
+                    break;
+            }
+        }
+
+        private void Backend_OnClosedOrFailed(object sender, EventArgs args)
+        {
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => PanelSwitch(false));
+        }
+
+        private void PanelSwitch(bool isBackendAlive)
+        {
+            if (isBackendAlive)
+            {
+                MainPanel.Visibility = Visibility.Visible;
+                BackendPanel.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                MainPanel.Visibility = Visibility.Collapsed;
+                BackendPanel.Visibility = Visibility.Visible;
+            }
         }
 
         private void TdpSlider_OnValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            var valueSet = new ValueSet
-            {
-                ["cmd"] = "set-tdp",
-                ["tdp"] = (int)e.NewValue
-            };
-            _ = Backend.Instance.SendRequestAsync(valueSet);
+            Backend.Instance.Send($"set-tdp {TdpSlider.Value}");
         }
 
         private void LaunchBackendButton_OnClick(object sender, RoutedEventArgs e)

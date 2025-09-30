@@ -9,7 +9,7 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="8a7a1823-ba70-42d7-83b5-3a1b27a41982"
+    Name="RyzenAdjUWP.Package"
     Publisher="CN=chenx"
     Version="1.0.0.0" />
 
@@ -42,9 +42,6 @@
         <uap:SplashScreen Image="Images\SplashScreen.png" />
       </uap:VisualElements>
       <Extensions>
-        <uap:Extension Category="windows.appService">
-          <uap:AppService Name="RyzenAdjAppService"/>
-        </uap:Extension>
         <desktop:Extension Category="windows.fullTrustProcess" Executable="RyzenAdjUWP.Backend/RyzenAdjUWP.Backend.exe" />
         <uap3:Extension Category="windows.appExtension">
           <uap3:AppExtension Name="microsoft.gameBarUIExtension"

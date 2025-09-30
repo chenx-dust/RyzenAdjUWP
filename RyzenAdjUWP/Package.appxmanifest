@@ -9,7 +9,7 @@
   IgnorableNamespaces="uap uap3 mp">
 
   <Identity
-    Name="695778d8-33d0-498d-b7a2-16f87624ef42"
+    Name="RyzenAdjUWP"
     Publisher="CN=chenx"
     Version="1.0.0.0" />
 
@@ -40,7 +40,9 @@
         Square44x44Logo="Assets\Square44x44Logo.png"
         Description="Adjusting Ryzen CPU"
         BackgroundColor="transparent"
-        AppListEntry="none"/>
+        AppListEntry="none">
+        <uap:DefaultTile/>
+      </uap:VisualElements>
     </Application>
   </Applications>
 

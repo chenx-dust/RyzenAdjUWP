@@ -175,12 +175,6 @@ namespace RyzenAdjUWP
 
             deferral.Complete();
         }
-
-        protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
-        {
-            base.OnBackgroundActivated(args);
-            Backend.Instance.OnBackgroundActivated(args.TaskInstance);
-        }
     }
 }
 

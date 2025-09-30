@@ -20,27 +20,31 @@
         <local:AdjustSliderCommand x:Key="SliderDecrease1" Step="-1"/>
     </Page.Resources>
 
-    <StackPanel Padding="20">
-        <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="Power Limit" FontSize="16" FontWeight="Bold"/>
-        <Slider x:Name="TdpSlider" Margin="0,5" ValueChanged="TdpSlider_OnValueChanged"/>
-        <Grid Margin="0,0,0,5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,5,0" Content="-5"
+    <Grid Padding="20">
+        <StackPanel x:Name="BackendPanel">
+            <Button x:Name="LaunchBackendButton" Margin="0,5" Click="LaunchBackendButton_OnClick">Launch Backend</Button>
+        </StackPanel>
+        <StackPanel x:Name="MainPanel">
+            <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="Power Limit" FontSize="16" FontWeight="Bold"/>
+            <Slider x:Name="TdpSlider" Margin="0,5" ValueChanged="TdpSlider_OnValueChanged"/>
+            <Grid Margin="0,0,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,5,0" Content="-5"
                     Command="{StaticResource SliderDecrease5}" CommandParameter="{Binding ElementName=TdpSlider}"/>
-            <Button Grid.Column="1" HorizontalAlignment="Stretch" Margin="5,0" Content="-1"
+                <Button Grid.Column="1" HorizontalAlignment="Stretch" Margin="5,0" Content="-1"
                     Command="{StaticResource SliderDecrease1}" CommandParameter="{Binding ElementName=TdpSlider}"/>
-            <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value, Converter={StaticResource WattConverter}, ElementName=TdpSlider}"/>
-            <Button Grid.Column="3" HorizontalAlignment="Stretch" Margin="5,0" Content="+1"
+                <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value, Converter={StaticResource WattConverter}, ElementName=TdpSlider}"/>
+                <Button Grid.Column="3" HorizontalAlignment="Stretch" Margin="5,0" Content="+1"
                     Command="{StaticResource SliderIncrease1}" CommandParameter="{Binding ElementName=TdpSlider}"/>
-            <Button Grid.Column="4" HorizontalAlignment="Stretch" Margin="5,0,0,0" Content="+5"
+                <Button Grid.Column="4" HorizontalAlignment="Stretch" Margin="5,0,0,0" Content="+5"
                     Command="{StaticResource SliderIncrease5}" CommandParameter="{Binding ElementName=TdpSlider}"/>
-        </Grid>
-        <Button x:Name="LaunchBackendButton" Margin="0,5" Click="LaunchBackendButton_OnClick">Launch Backend</Button>
-    </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Grid>
 </Page>
