@@ -31,7 +31,7 @@
   </Resources>
 
   <Applications>
-    <Application Id="RyzenAdj.MainApp"
+    <Application Id="RyzenAdjUWP.MainApp"
       Executable="$targetnametoken$.exe"
       EntryPoint="RyzenAdjUWP.App">
       <uap:VisualElements
@@ -39,40 +39,8 @@
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
         Description="Adjusting Ryzen CPU"
-        BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
-        <uap:SplashScreen Image="Assets\SplashScreen.png" />
-      </uap:VisualElements>
-      <Extensions>
-        <uap3:Extension Category="windows.appExtension">
-          <uap3:AppExtension Name="microsoft.gameBarUIExtension"
-                             Id="RyzenAdj.XboxGameBarUI"
-                             DisplayName="RyzenAdjUWP"
-                             Description="Adjusting Ryzen CPU"
-                             PublicFolder="GameBar">
-            <uap3:Properties>
-              <GameBarWidget Type="Standard">
-                <HomeMenuVisible>true</HomeMenuVisible>
-                <ActivateAfterInstall>true</ActivateAfterInstall>
-                <Window>
-                  <Size>
-                    <Height>300</Height>
-                    <Width>400</Width>
-                    <MinHeight>150</MinHeight>
-                    <MinWidth>200</MinWidth>
-                    <MaxHeight>350</MaxHeight>
-                    <MaxWidth>450</MaxWidth>
-                  </Size>
-                  <ResizeSupported>
-                    <Horizontal>true</Horizontal>
-                    <Vertical>true</Vertical>
-                  </ResizeSupported>
-                </Window>
-              </GameBarWidget>
-            </uap3:Properties>
-          </uap3:AppExtension>
-        </uap3:Extension>
-      </Extensions>
+        BackgroundColor="transparent"
+        AppListEntry="none"/>
     </Application>
   </Applications>
 

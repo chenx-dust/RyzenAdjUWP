@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.SqlServer.Server;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -15,27 +16,23 @@ namespace RyzenAdjUWP.Backend
     {
         static void Main(string[] args)
         {
-            WindowsPrincipal principal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
-            bool hasAdministrativeRight = principal.IsInRole(WindowsBuiltInRole.Administrator);
-            if (!hasAdministrativeRight)
+            var mutex = new Mutex(true, "RyzenAdjUWP.Backend");
+            if (!mutex.WaitOne(TimeSpan.Zero, true))
             {
-                ProcessStartInfo processInfo = new ProcessStartInfo();
-                processInfo.Verb = "runas"; // This is the key to requesting elevation
-                processInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
-
-                try
-                {
-                    Process.Start(processInfo);
-                }
-                catch (Exception ex)
-                {
-                    // Handle the case where the user cancels the UAC prompt
-                    Console.WriteLine($"Error relaunching with admin rights: {ex.Message}");
-                }
-                Environment.Exit(0); // Exit the current non-elevated instance
+                Console.WriteLine("[Mutex] Only one instance at a time");
+                return;
             }
+
+            var principal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
+            if (!principal.IsInRole(WindowsBuiltInRole.Administrator))
+            {
+                Console.WriteLine("[Permission] Should run as Administrator");
+                return;
+            }
+
             var backgroundProcess = new BackgroundProcess();
-            Console.ReadKey();
+            _ = backgroundProcess.InitializeAsync();
+            while (true) ;
         }
     }
 }

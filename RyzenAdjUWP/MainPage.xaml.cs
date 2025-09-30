@@ -32,14 +32,21 @@ namespace RyzenAdjUWP
         public MainPage()
         {
             InitializeComponent();
-            _ = Backend.LaunchBackend();
         }
 
         private void TdpSlider_OnValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            var valueSet = new ValueSet();
-            valueSet["TDP"] = (int)e.NewValue;
+            var valueSet = new ValueSet
+            {
+                ["cmd"] = "set-tdp",
+                ["tdp"] = (int)e.NewValue
+            };
             _ = Backend.Instance.SendRequestAsync(valueSet);
+        }
+
+        private void LaunchBackendButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _ = Backend.LaunchBackend();
         }
     }
 

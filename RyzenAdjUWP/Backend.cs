@@ -21,8 +21,8 @@ namespace RyzenAdjUWP
 {
     internal class Backend
     {
-        private AppServiceConnection AppServiceConnection { get; set; }
-        private BackgroundTaskDeferral AppServiceDeferral { get; set; }
+        private AppServiceConnection _appServiceConnection;
+        private BackgroundTaskDeferral _appServiceDeferral;
 
         public event EventHandler<ValueSet> MessageReceivedEvent;
 
@@ -39,10 +39,10 @@ namespace RyzenAdjUWP
         public void OnBackgroundActivated(IBackgroundTaskInstance taskInstance)
         {
             AppServiceTriggerDetails appService = taskInstance.TriggerDetails as AppServiceTriggerDetails;
-            AppServiceDeferral = taskInstance.GetDeferral();
-            AppServiceConnection = appService.AppServiceConnection;
-            AppServiceConnection.RequestReceived += OnAppServiceRequestReceived;
-            AppServiceConnection.ServiceClosed += AppServiceConnection_ServiceClosed;
+            _appServiceDeferral = taskInstance.GetDeferral();
+            _appServiceConnection = appService.AppServiceConnection;
+            _appServiceConnection.RequestReceived += OnAppServiceRequestReceived;
+            _appServiceConnection.ServiceClosed += AppServiceConnection_ServiceClosed;
         }
 
         private void OnAppServiceRequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
@@ -54,12 +54,29 @@ namespace RyzenAdjUWP
 
         private void AppServiceConnection_ServiceClosed(AppServiceConnection sender, AppServiceClosedEventArgs args)
         {
-            AppServiceDeferral.Complete();
+            Debug.WriteLine("[Connection] Service closed");
+            _appServiceConnection.Dispose();
+            _appServiceConnection = null;
+            _appServiceDeferral.Complete();
         }
 
         public async Task<AppServiceResponse> SendRequestAsync(ValueSet valueSet)
         {
-            return await AppServiceConnection.SendMessageAsync(valueSet);
+            if (_appServiceConnection == null)
+            {
+                Debug.WriteLine("[Connection] No active connection");
+                return null;
+            }
+
+            try
+            {
+                return await _appServiceConnection.SendMessageAsync(valueSet);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Connection] Send message failed: {ex.Message}");
+                return null;
+            }
         }
     }
 }
