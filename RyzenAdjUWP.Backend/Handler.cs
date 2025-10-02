@@ -42,7 +42,7 @@ namespace RyzenAdjUWP.Backend
                         _adj.FastLimit_W = tdp;
                         _adj.SlowLimit_W = tdp;
                     }
-                    goto case "get-tdp";
+                    break;
                 case "get-tdp":
                     {
                         _adj.RefreshTable();
@@ -58,7 +58,7 @@ namespace RyzenAdjUWP.Backend
                         var originStapmLimit = _adj.StapmLimit_W;
                         var originFastLimit = _adj.FastLimit_W;
                         var originSlowLimit = _adj.SlowLimit_W;
-                        Console.WriteLine($"[Handler] Origin StapmLimit: {originStapmLimit} mW, FastLimit: {originFastLimit} mW, SlowLimit: {originSlowLimit} mW");
+                        Console.WriteLine($"[Handler] Origin StapmLimit: {originStapmLimit} W, FastLimit: {originFastLimit} W, SlowLimit: {originSlowLimit} W");
                         var currentTdp = Math.Max(originStapmLimit, Math.Max(originFastLimit, originSlowLimit));
                         var currentTdpInt = (int)Math.Round(currentTdp);
                         comm.Send($"tdp {currentTdpInt}");
@@ -67,13 +67,13 @@ namespace RyzenAdjUWP.Backend
                         _adj.FastLimit_W = testMaxTdp;
                         _adj.SlowLimit_W = testMaxTdp;
                         _adj.RefreshTable();
-                        Console.WriteLine($"[Handler] Max StapmLimit: {_adj.StapmLimit_W} mW, FastLimit: {_adj.FastLimit_W} mW, SlowLimit: {_adj.SlowLimit_W} mW");
+                        Console.WriteLine($"[Handler] Max StapmLimit: {_adj.StapmLimit_W} W, FastLimit: {_adj.FastLimit_W} W, SlowLimit: {_adj.SlowLimit_W} W");
                         var maxTdp = Math.Max(_adj.StapmLimit_W, Math.Max(_adj.FastLimit_W, _adj.SlowLimit_W));
                         _adj.StapmLimit_W = testMinTdp;
                         _adj.FastLimit_W = testMinTdp;
                         _adj.SlowLimit_W = testMinTdp;
                         _adj.RefreshTable();
-                        Console.WriteLine($"[Handler] Min StapmLimit: {_adj.StapmLimit_W} mW, FastLimit: {_adj.FastLimit_W} mW, SlowLimit: {_adj.SlowLimit_W} mW");
+                        Console.WriteLine($"[Handler] Min StapmLimit: {_adj.StapmLimit_W} W, FastLimit: {_adj.FastLimit_W} W, SlowLimit: {_adj.SlowLimit_W} W");
                         var minTdp = Math.Min(_adj.StapmLimit_W, Math.Min(_adj.FastLimit_W, _adj.SlowLimit_W));
                         _adj.StapmLimit_W = originStapmLimit;
                         _adj.FastLimit_W = originFastLimit;

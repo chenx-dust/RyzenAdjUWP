@@ -72,7 +72,8 @@ namespace RyzenAdjUWP.Backend
                 }
                 string message = _reader.ReadLine();
                 Console.WriteLine($"[Connection] Received: {message}");
-                ReceivedEvent?.Invoke(this, message);
+                if (!string.IsNullOrEmpty(message))
+                    ReceivedEvent?.Invoke(this, message);
             }
         }
 
