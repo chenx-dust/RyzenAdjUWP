@@ -27,32 +27,44 @@ namespace RyzenAdjUWP
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MainPage
+    public sealed partial class MainPage : IDisposable
     {
+        private MainPageModel _model;
+
+        private bool _prevent_TdpSlider_OnValueChanged = false;
+        private DispatcherTimer _timer_TdpSlider_OnValueChanged;
+
         public MainPage()
         {
             InitializeComponent();
+            _model = new MainPageModel();
+            this.DataContext = _model;
+
             Backend.Instance.MessageReceivedEvent += Backend_OnMessageReceived;
             Backend.Instance.ClosedOrFailedEvent += Backend_OnClosedOrFailed;
-            PanelSwitch(Backend.Instance.IsConnected);
-        }
-
-        private void Backend_OnMessageReceived(object sender, string message)
-        {
-            string[] args = message.Split(' ');
-            if (args.Length == 0)
-                return;
-            switch (message)
+            if (Backend.Instance.IsConnected)
+                ConnectedInitialize();
+            else
+                PanelSwitch(false);
+            _timer_TdpSlider_OnValueChanged = new DispatcherTimer();
+            _timer_TdpSlider_OnValueChanged.Interval = TimeSpan.FromSeconds(0.5);
+            _timer_TdpSlider_OnValueChanged.Tick += delegate
             {
-                case "pong":
-                    _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => PanelSwitch(true));
-                    break;
-            }
+                Backend.Instance.Send($"set-tdp {TdpSlider.Value}");
+                _timer_TdpSlider_OnValueChanged.Stop();
+            };
         }
 
-        private void Backend_OnClosedOrFailed(object sender, EventArgs args)
+        public void Dispose()
         {
-            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => PanelSwitch(false));
+            Backend.Instance.MessageReceivedEvent -= Backend_OnMessageReceived;
+            Backend.Instance.ClosedOrFailedEvent -= Backend_OnClosedOrFailed;
+        }
+
+        private void ConnectedInitialize()
+        {
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => PanelSwitch(true));
+            Backend.Instance.Send("get-tdp-limit");
         }
 
         private void PanelSwitch(bool isBackendAlive)
@@ -69,9 +81,47 @@ namespace RyzenAdjUWP
             }
         }
 
+        private void Backend_OnMessageReceived(object sender, string message)
+        {
+            var backend = sender as Backend;
+            string[] args = message.Split(' ');
+            if (args.Length == 0)
+                return;
+            switch (args[0])
+            {
+                case "connected":
+                    ConnectedInitialize();
+                    break;
+                case "tdp-limit":
+                    _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        TdpSlider.Maximum = int.Parse(args[1]);
+                        TdpSlider.Minimum = int.Parse(args[2]);
+                    });
+                    break;
+                case "tdp":
+                    _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                        _prevent_TdpSlider_OnValueChanged = true;
+                        TdpSlider.Value = int.Parse(args[1]);
+                        _prevent_TdpSlider_OnValueChanged = false;
+                    });
+                    break;
+            }
+        }
+
+        private void Backend_OnClosedOrFailed(object _, EventArgs args)
+        {
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => PanelSwitch(false));
+        }
+
         private void TdpSlider_OnValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            Backend.Instance.Send($"set-tdp {TdpSlider.Value}");
+            if (_prevent_TdpSlider_OnValueChanged)
+            {
+                _timer_TdpSlider_OnValueChanged?.Stop();
+                return;
+            }
+            _timer_TdpSlider_OnValueChanged.Start();
         }
 
         private void LaunchBackendButton_OnClick(object sender, RoutedEventArgs e)

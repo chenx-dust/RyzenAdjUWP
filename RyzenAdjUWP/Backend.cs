@@ -29,22 +29,22 @@ namespace RyzenAdjUWP
         private static Backend _instance;
         public static Backend Instance => _instance ?? (_instance = new Backend());
 
-        private NamedPipeClientStream client;
-        private StreamReader reader;
-        private StreamWriter writer;
-        private Task runningThread;
+        private NamedPipeClientStream _client;
+        private StreamReader _reader;
+        private StreamWriter _writer;
+        private Task _loop;
 
-        public bool IsConnected => client.IsConnected;
+        public bool IsConnected => _client.IsConnected;
 
         private Backend()
         {
-            client = new NamedPipeClientStream(".", @"LOCAL\RyzenAdjPipe",
+            _client = new NamedPipeClientStream(".", @"LOCAL\RyzenAdjPipe",
                 PipeDirection.InOut, PipeOptions.Asynchronous);
 
-            reader = new StreamReader(client);
-            writer = new StreamWriter(client);
+            _reader = new StreamReader(_client);
+            _writer = new StreamWriter(_client);
 
-            runningThread = Task.Run(Loop);
+            _loop = Task.Run(Loop);
         }
 
         public static async Task LaunchBackend()
@@ -58,16 +58,16 @@ namespace RyzenAdjUWP
         {
             while (true)
             {
-                if (!client.IsConnected)
+                if (!_client.IsConnected)
                 {
-                    ClosedOrFailedEvent.Invoke(this, null);
-                    client.Connect();
+                    ClosedOrFailedEvent?.Invoke(this, null);
+                    _client.Connect();
                 }
                 try
                 {
-                    string message = reader.ReadLine();
+                    string message = _reader.ReadLine();
                     if (message != null)
-                        MessageReceivedEvent.Invoke(this, message);
+                        MessageReceivedEvent?.Invoke(this, message);
                 }
                 catch { }
             }
@@ -77,12 +77,15 @@ namespace RyzenAdjUWP
         {
             try
             {
-                writer.WriteLine(message);
-                writer.Flush();
+                lock (_writer)
+                {
+                    _writer.WriteLine(message);
+                    _writer.Flush();
+                }
             }
             catch
             {
-                ClosedOrFailedEvent.Invoke(this, null);
+                ClosedOrFailedEvent?.Invoke(this, null);
             }
         }
     }
