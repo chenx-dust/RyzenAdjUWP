@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
-using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace RyzenAdjUWP.Backend
@@ -39,10 +35,12 @@ namespace RyzenAdjUWP.Backend
         private static PipeSecurity GetPipeSecurity()
         {
             var ps = new PipeSecurity();
+            Console.WriteLine($"[Security] Package SID: {ApplicationData.Current.LocalSettings.Values["PackageSid"] as string}");
             var clientRule = new PipeAccessRule(
                 new SecurityIdentifier(ApplicationData.Current.LocalSettings.Values["PackageSid"] as string),
                 PipeAccessRights.ReadWrite,
                 AccessControlType.Allow);
+            Console.WriteLine($"[Security] User SID: {ApplicationData.Current.LocalSettings.Values["UserSid"] as string}");
             var ownerRule = new PipeAccessRule(
                 new SecurityIdentifier(ApplicationData.Current.LocalSettings.Values["UserSid"] as string),
                 PipeAccessRights.FullControl,

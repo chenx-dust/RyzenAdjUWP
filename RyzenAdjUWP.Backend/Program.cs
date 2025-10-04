@@ -1,18 +1,6 @@
-﻿using Microsoft.SqlServer.Server;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.IO.Pipes;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Security.AccessControl;
+﻿using System;
 using System.Security.Principal;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.UI.Xaml;
 
 namespace RyzenAdjUWP.Backend
 {

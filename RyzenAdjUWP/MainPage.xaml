@@ -13,50 +13,36 @@
     d:DataContext="{d:DesignInstance Type=local:MainPageModel}"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
     Background="#25282C"
-    RequestedTheme="Dark">
+    RequestedTheme="Dark"
+    UseSystemFocusVisuals="True"
+    IsFocusEngagementEnabled="True">
 
     <Page.Resources>
-        <local:WattConverter x:Key="WattConverter"/>
-        <local:AdjustSliderCommand x:Key="SliderIncrease5" Step="5"/>
-        <local:AdjustSliderCommand x:Key="SliderIncrease1" Step="1"/>
-        <local:AdjustSliderCommand x:Key="SliderDecrease5" Step="-5"/>
-        <local:AdjustSliderCommand x:Key="SliderDecrease1" Step="-1"/>
-
-        <SolidColorBrush x:Key="ButtonBackground" Color="#3E434B"/>
-        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#484E58"/>
-        <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#3A3F47"/>
-        <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="#2C3035"/>
-        <SolidColorBrush x:Key="ButtonBorderBrush" Color="#6B7584"/>
-        <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#6B7584"/>
-        <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#555D69"/>
-        <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="#3A3F46"/>
-        <StaticResource x:Key="RepeatButtonBackground" ResourceKey="ButtonBackground"/>
-        <StaticResource x:Key="RepeatButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
-        <StaticResource x:Key="RepeatButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
-        <StaticResource x:Key="RepeatButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
-        <StaticResource x:Key="RepeatButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
-        <StaticResource x:Key="RepeatButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrushPointerOver"/>
-        <StaticResource x:Key="RepeatButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
-        <StaticResource x:Key="RepeatButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
-        <CornerRadius x:Key="ControlCornerRadius">8,8,8,8</CornerRadius>
-        <Thickness x:Key="ButtonPadding">15,10,15,11</Thickness>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///Styles/XboxStyle.xaml"/>
+                <ResourceDictionary Source="ms-appx:///Styles/FontSizeNormal.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:WattConverter x:Key="WattConverter"/>
+            <local:AdjustSliderCommand x:Key="SliderIncrease5" Step="5"/>
+            <local:AdjustSliderCommand x:Key="SliderIncrease1" Step="1"/>
+            <local:AdjustSliderCommand x:Key="SliderDecrease5" Step="-5"/>
+            <local:AdjustSliderCommand x:Key="SliderDecrease1" Step="-1"/>
+        </ResourceDictionary>
     </Page.Resources>
 
     <Grid Padding="20">
-        <Grid x:Name="BackendPanel" VerticalAlignment="Center">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <TextBlock HorizontalTextAlignment="Center" Margin="0,5">RyzenAdjUWP Backend Not Connected</TextBlock>
-            <Button x:Name="LaunchBackendButton" Grid.Row="1" Margin="0,5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Click="LaunchBackendButton_OnClick" FontWeight="Bold" FontSize="18">
+        <StackPanel x:Name="BackendPanel" VerticalAlignment="Center" Padding="0,0,0,50" Spacing="5">
+            <FontIcon FontSize="{ThemeResource FontSize28}" Glyph="&#57722;"/>
+            <TextBlock HorizontalTextAlignment="Center" FontSize="{ThemeResource FontSize14}">RyzenAdjUWP Backend Not Connected</TextBlock>
+            <Button x:Name="LaunchBackendButton" HorizontalAlignment="Stretch" VerticalAlignment="Center" Click="LaunchBackendButton_OnClick" FontWeight="SemiBold" FontSize="{ThemeResource FontSize16}">
                 Launch Backend
             </Button>
-        </Grid>
-        <StackPanel x:Name="MainPanel">
-            <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="Power Limit" FontSize="16" FontWeight="Bold"/>
-            <Slider x:Name="TdpSlider" Margin="0,10" Value="{Binding Tdp, Mode=TwoWay}" Maximum="{Binding TdpMax}" Minimum="{Binding TdpMin}"/>
-            <Grid Margin="0,0,0,5">
+        </StackPanel>
+        <StackPanel x:Name="MainPanel" Spacing="5">
+            <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="Power Limit" FontSize="{ThemeResource FontSize16}" FontWeight="Bold"/>
+            <Slider x:Name="TdpSlider" Value="{Binding Tdp, Mode=TwoWay}" Maximum="{Binding TdpMax}" Minimum="{Binding TdpMin}"/>
+            <Grid Margin="0,5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -64,14 +50,14 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <RepeatButton Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,5,0" Content="-5"
+                <RepeatButton Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,5,0" Content="-5" FontSize="{ThemeResource FontSize14}"
                     Command="{StaticResource SliderDecrease5}" CommandParameter="{Binding ElementName=TdpSlider}"/>
-                <RepeatButton Grid.Column="1" HorizontalAlignment="Stretch" Margin="5,0" Content="-1"
+                <RepeatButton Grid.Column="1" HorizontalAlignment="Stretch" Margin="5,0" Content="-1" FontSize="{ThemeResource FontSize14}"
                     Command="{StaticResource SliderDecrease1}" CommandParameter="{Binding ElementName=TdpSlider}"/>
-                <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Converter={StaticResource WattConverter}, Path=Tdp}"/>
-                <RepeatButton Grid.Column="3" HorizontalAlignment="Stretch" Margin="5,0" Content="+1"
+                <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{ThemeResource FontSize14}" Text="{Binding Converter={StaticResource WattConverter}, Path=Tdp}"/>
+                <RepeatButton Grid.Column="3" HorizontalAlignment="Stretch" Margin="5,0" Content="+1" FontSize="{ThemeResource FontSize14}"
                     Command="{StaticResource SliderIncrease1}" CommandParameter="{Binding ElementName=TdpSlider}"/>
-                <RepeatButton Grid.Column="4" HorizontalAlignment="Stretch" Margin="5,0,0,0" Content="+5"
+                <RepeatButton Grid.Column="4" HorizontalAlignment="Stretch" Margin="5,0,0,0" Content="+5" FontSize="{ThemeResource FontSize14}"
                     Command="{StaticResource SliderIncrease5}" CommandParameter="{Binding ElementName=TdpSlider}"/>
             </Grid>
         </StackPanel>

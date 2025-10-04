@@ -1,23 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
-using System.Linq;
-using System.Reflection.PortableExecutable;
 using System.Security.Principal;
-using System.ServiceModel.Channels;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
-using Windows.ApplicationModel.AppService;
-using Windows.ApplicationModel.Background;
-using Windows.Foundation.Collections;
-using Windows.Media.Protection.PlayReady;
 using Windows.Security.Authentication.Web;
 using Windows.Storage;
-using Windows.UI.Core;
-using Windows.UI.Xaml;
 
 namespace RyzenAdjUWP
 {

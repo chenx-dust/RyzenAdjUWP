@@ -1,36 +1,24 @@
 ﻿using Microsoft.Gaming.XboxGameBar;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.IO.Pipes;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.ServiceModel.Channels;
-using System.Windows.Input;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Security.Authentication.Web;
-using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace RyzenAdjUWP
 {
-    /// <summary>
-    /// 可用于自身或导航至 Frame 内部的空白页。
-    /// </summary>
     public sealed partial class MainPage : IDisposable
     {
         private static MainPageModel _modelBase = new MainPageModel();
         private MainPageModelWrapper _model;
+        private ResourceDictionary _normalFontSizeResource = new ResourceDictionary
+        {
+            Source = new Uri("ms-appx:///Styles/FontSizeNormal.xaml")
+        };
+        private ResourceDictionary _compactFontSizeResource = new ResourceDictionary
+        {
+            Source = new Uri("ms-appx:///Styles/FontSizeCompact.xaml")
+        };
 
         public MainPage()
         {
@@ -50,6 +38,32 @@ namespace RyzenAdjUWP
         {
             Backend.Instance.MessageReceivedEvent -= Backend_OnMessageReceived;
             Backend.Instance.ClosedOrFailedEvent -= Backend_OnClosedOrFailed;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            var widget = e.Parameter as XboxGameBarWidget;
+            if (widget != null)
+            {
+                OnCompactModeChanged(widget, null);
+                widget.CompactModeEnabledChanged += OnCompactModeChanged;
+            }
+            base.OnNavigatedTo(e);
+        }
+
+        private void OnCompactModeChanged(XboxGameBarWidget widget, object _)
+        {
+            if (widget.CompactModeEnabled)
+            {
+                if (!this.Resources.MergedDictionaries.Contains(_compactFontSizeResource))
+                    this.Resources.MergedDictionaries.Add(_compactFontSizeResource);
+            }
+            else
+            {
+                this.Resources.MergedDictionaries.Remove(_compactFontSizeResource);
+            }
+            this.RequestedTheme = ElementTheme.Light;
+            this.RequestedTheme = ElementTheme.Dark;
         }
 
         private void ConnectedInitialize()
