@@ -12,8 +12,7 @@
     d:DesignHeight="400"
     d:DataContext="{d:DesignInstance Type=local:MainPageModel}"
     muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
-    Background="#25282C"
-    RequestedTheme="Dark"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     UseSystemFocusVisuals="True"
     IsFocusEngagementEnabled="True">
 

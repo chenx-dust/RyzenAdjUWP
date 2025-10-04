@@ -11,10 +11,6 @@ namespace RyzenAdjUWP
     {
         private static MainPageModel _modelBase = new MainPageModel();
         private MainPageModelWrapper _model;
-        private ResourceDictionary _normalFontSizeResource = new ResourceDictionary
-        {
-            Source = new Uri("ms-appx:///Styles/FontSizeNormal.xaml")
-        };
         private ResourceDictionary _compactFontSizeResource = new ResourceDictionary
         {
             Source = new Uri("ms-appx:///Styles/FontSizeCompact.xaml")
@@ -45,7 +41,7 @@ namespace RyzenAdjUWP
             var widget = e.Parameter as XboxGameBarWidget;
             if (widget != null)
             {
-                OnCompactModeChanged(widget, null);
+                SwitchCompactMode(widget.CompactModeEnabled);
                 widget.CompactModeEnabledChanged += OnCompactModeChanged;
             }
             base.OnNavigatedTo(e);
@@ -53,7 +49,19 @@ namespace RyzenAdjUWP
 
         private void OnCompactModeChanged(XboxGameBarWidget widget, object _)
         {
-            if (widget.CompactModeEnabled)
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                SwitchCompactMode(widget.CompactModeEnabled);
+                var lastTheme = this.RequestedTheme;
+                this.RequestedTheme = ElementTheme.Light;
+                this.RequestedTheme = ElementTheme.Dark;
+                this.RequestedTheme = lastTheme;
+            });
+        }
+
+        private void SwitchCompactMode(bool enabled)
+        {
+            if (enabled)
             {
                 if (!this.Resources.MergedDictionaries.Contains(_compactFontSizeResource))
                     this.Resources.MergedDictionaries.Add(_compactFontSizeResource);
@@ -62,8 +70,6 @@ namespace RyzenAdjUWP
             {
                 this.Resources.MergedDictionaries.Remove(_compactFontSizeResource);
             }
-            this.RequestedTheme = ElementTheme.Light;
-            this.RequestedTheme = ElementTheme.Dark;
         }
 
         private void ConnectedInitialize()
