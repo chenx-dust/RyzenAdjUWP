@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace RyzenAdjUWP.Backend
             {
                 case "set-tdp":
                     {
-                        Console.WriteLine($"[Handler] Setting TDP to {args[1]} W");
+                        Debug.WriteLine($"[Handler] Setting TDP to {args[1]} W");
                         var tdp = float.Parse(args[1]);
                         _adj.StapmLimit_W = tdp;
                         _adj.FastLimit_W = tdp;
@@ -53,12 +54,12 @@ namespace RyzenAdjUWP.Backend
                     break;
                 case "get-tdp-limit":
                     {
-                        Console.WriteLine("[Handler] Get TDP Limit");
+                        Debug.WriteLine("[Handler] Get TDP Limit");
                         _adj.RefreshTable();
                         var originStapmLimit = _adj.StapmLimit_W;
                         var originFastLimit = _adj.FastLimit_W;
                         var originSlowLimit = _adj.SlowLimit_W;
-                        Console.WriteLine($"[Handler] Origin StapmLimit: {originStapmLimit} W, FastLimit: {originFastLimit} W, SlowLimit: {originSlowLimit} W");
+                        Debug.WriteLine($"[Handler] Origin StapmLimit: {originStapmLimit} W, FastLimit: {originFastLimit} W, SlowLimit: {originSlowLimit} W");
                         var currentTdp = Math.Max(originStapmLimit, Math.Max(originFastLimit, originSlowLimit));
                         var currentTdpInt = (int)Math.Round(currentTdp);
                         comm.Send($"tdp {currentTdpInt}");
@@ -67,20 +68,20 @@ namespace RyzenAdjUWP.Backend
                         _adj.FastLimit_W = testMaxTdp;
                         _adj.SlowLimit_W = testMaxTdp;
                         _adj.RefreshTable();
-                        Console.WriteLine($"[Handler] Max StapmLimit: {_adj.StapmLimit_W} W, FastLimit: {_adj.FastLimit_W} W, SlowLimit: {_adj.SlowLimit_W} W");
+                        Debug.WriteLine($"[Handler] Max StapmLimit: {_adj.StapmLimit_W} W, FastLimit: {_adj.FastLimit_W} W, SlowLimit: {_adj.SlowLimit_W} W");
                         var maxTdp = Math.Max(_adj.StapmLimit_W, Math.Max(_adj.FastLimit_W, _adj.SlowLimit_W));
                         _adj.StapmLimit_W = testMinTdp;
                         _adj.FastLimit_W = testMinTdp;
                         _adj.SlowLimit_W = testMinTdp;
                         _adj.RefreshTable();
-                        Console.WriteLine($"[Handler] Min StapmLimit: {_adj.StapmLimit_W} W, FastLimit: {_adj.FastLimit_W} W, SlowLimit: {_adj.SlowLimit_W} W");
+                        Debug.WriteLine($"[Handler] Min StapmLimit: {_adj.StapmLimit_W} W, FastLimit: {_adj.FastLimit_W} W, SlowLimit: {_adj.SlowLimit_W} W");
                         var minTdp = Math.Min(_adj.StapmLimit_W, Math.Min(_adj.FastLimit_W, _adj.SlowLimit_W));
                         _adj.StapmLimit_W = originStapmLimit;
                         _adj.FastLimit_W = originFastLimit;
                         _adj.SlowLimit_W = originSlowLimit;
                         var maxTdpInt = (int)Math.Round(maxTdp);
                         var minTdpInt = (int)Math.Round(minTdp);
-                        Console.WriteLine($"[Handler] Max TDP: {maxTdpInt} W, Min TDP: {minTdpInt} W");
+                        Debug.WriteLine($"[Handler] Max TDP: {maxTdpInt} W, Min TDP: {minTdpInt} W");
                         comm.Send($"tdp-limit {maxTdpInt} {minTdpInt}");
                     }
                     break;

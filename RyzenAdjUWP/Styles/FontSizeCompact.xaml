@@ -4,5 +4,5 @@
 
     <x:Double x:Key="FontSize14">18</x:Double>
     <x:Double x:Key="FontSize16">20</x:Double>
-    <x:Double x:Key="FontSize28">32</x:Double>
+    <x:Double x:Key="NotConnectedFontSize">60</x:Double>
 </ResourceDictionary>

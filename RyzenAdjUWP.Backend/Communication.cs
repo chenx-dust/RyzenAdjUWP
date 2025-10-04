@@ -21,7 +21,7 @@ namespace RyzenAdjUWP.Backend
         public Communication()
         {
             var pipeName = $"Sessions\\{Process.GetCurrentProcess().SessionId}\\AppContainerNamedObjects\\{ApplicationData.Current.LocalSettings.Values["PackageSid"]}\\RyzenAdjPipe";
-            Console.WriteLine($"[Connection] Pipe name: {pipeName}");
+            Debug.WriteLine($"[Connection] Pipe name: {pipeName}");
             
             _server = new NamedPipeServerStream(
                 pipeName,
@@ -35,12 +35,12 @@ namespace RyzenAdjUWP.Backend
         private static PipeSecurity GetPipeSecurity()
         {
             var ps = new PipeSecurity();
-            Console.WriteLine($"[Security] Package SID: {ApplicationData.Current.LocalSettings.Values["PackageSid"] as string}");
+            Debug.WriteLine($"[Security] Package SID: {ApplicationData.Current.LocalSettings.Values["PackageSid"] as string}");
             var clientRule = new PipeAccessRule(
                 new SecurityIdentifier(ApplicationData.Current.LocalSettings.Values["PackageSid"] as string),
                 PipeAccessRights.ReadWrite,
                 AccessControlType.Allow);
-            Console.WriteLine($"[Security] User SID: {ApplicationData.Current.LocalSettings.Values["UserSid"] as string}");
+            Debug.WriteLine($"[Security] User SID: {ApplicationData.Current.LocalSettings.Values["UserSid"] as string}");
             var ownerRule = new PipeAccessRule(
                 new SecurityIdentifier(ApplicationData.Current.LocalSettings.Values["UserSid"] as string),
                 PipeAccessRights.FullControl,
@@ -52,9 +52,9 @@ namespace RyzenAdjUWP.Backend
 
         public void Run()
         {
-            Console.WriteLine($"[Connection] Waiting for connection");
+            Debug.WriteLine($"[Connection] Waiting for connection");
             _server.WaitForConnection();
-            Console.WriteLine($"[Connection] Connection established");
+            Debug.WriteLine($"[Connection] Connection established");
             ConnectedEvent?.Invoke(this, null);
 
             while (true)
@@ -62,14 +62,14 @@ namespace RyzenAdjUWP.Backend
                 if (!_server.IsConnected)
                 {
                     _server.Disconnect();
-                    Console.WriteLine("[Connection] Disconnected, waiting for reconnecting");
+                    Debug.WriteLine("[Connection] Disconnected, waiting for reconnecting");
                     DisconnectedEvent?.Invoke(this, null);
                     _server.WaitForConnection();
-                    Console.WriteLine("[Connection] Reconnected");
+                    Debug.WriteLine("[Connection] Reconnected");
                     ConnectedEvent?.Invoke(this, null);
                 }
                 string message = _reader.ReadLine();
-                Console.WriteLine($"[Connection] Received: {message}");
+                Debug.WriteLine($"[Connection] Received: {message}");
                 if (!string.IsNullOrEmpty(message))
                     ReceivedEvent?.Invoke(this, message);
             }
@@ -80,7 +80,7 @@ namespace RyzenAdjUWP.Backend
             if (!_server.IsConnected || message == null)
                 return;
 
-            Console.WriteLine($"[Connection] Sent: {message}");
+            Debug.WriteLine($"[Connection] Sent: {message}");
             _writer.WriteLine(message);
             _writer.Flush();
         }

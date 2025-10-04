@@ -42,7 +42,7 @@
         <uap:SplashScreen Image="Images\SplashScreen.png" />
       </uap:VisualElements>
       <Extensions>
-        <desktop:Extension Category="windows.fullTrustProcess" Executable="RyzenAdjUWP.Backend/RyzenAdjUWP.Backend.exe" />
+        <desktop:Extension Category="windows.fullTrustProcess" Executable="RyzenAdjUWP.Backend/RyzenAdjUWP.Backend.exe"/>
         <uap3:Extension Category="windows.appExtension">
           <uap3:AppExtension Name="microsoft.gameBarUIExtension"
                              Id="RyzenAdj.XboxGameBarUI"

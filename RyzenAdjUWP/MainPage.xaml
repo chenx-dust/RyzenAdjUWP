@@ -31,8 +31,8 @@
     </Page.Resources>
 
     <Grid Padding="20">
-        <StackPanel x:Name="BackendPanel" VerticalAlignment="Center" Padding="0,0,0,50" Spacing="5">
-            <FontIcon FontSize="{ThemeResource FontSize28}" Glyph="&#57722;"/>
+        <StackPanel x:Name="BackendPanel" VerticalAlignment="Center" Padding="0,0,0,40" Spacing="8">
+            <FontIcon FontSize="{ThemeResource NotConnectedFontSize}" Margin="0,4" Glyph="&#57722;"/>
             <TextBlock HorizontalTextAlignment="Center" FontSize="{ThemeResource FontSize14}">RyzenAdjUWP Backend Not Connected</TextBlock>
             <Button x:Name="LaunchBackendButton" HorizontalAlignment="Stretch" VerticalAlignment="Center" Click="LaunchBackendButton_OnClick" FontWeight="SemiBold" FontSize="{ThemeResource FontSize16}">
                 Launch Backend
