@@ -4,41 +4,59 @@
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="#FFFFFF"/>
-            <SolidColorBrush x:Key="ButtonBackground" Color="#F9F9FA"/>
-            <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#E7E8EB"/>
-            <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#F1F1F3"/>
-            <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="#FDFDFE"/>
-            <SolidColorBrush x:Key="ButtonBorderBrush" Color="#818A98"/>
-            <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#818A98"/>
-            <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#ADB3BC"/>
-            <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="#D9DCE0"/>
-            <StaticResource x:Key="RepeatButtonBackground" ResourceKey="ButtonBackground"/>
-            <StaticResource x:Key="RepeatButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
-            <StaticResource x:Key="RepeatButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
-            <StaticResource x:Key="RepeatButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
-            <StaticResource x:Key="RepeatButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
-            <StaticResource x:Key="RepeatButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrushPointerOver"/>
-            <StaticResource x:Key="RepeatButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
-            <StaticResource x:Key="RepeatButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
+
+            <SolidColorBrush x:Key="ControlFillColorDefaultBrush" Color="#F9F9FA"/>
+            <SolidColorBrush x:Key="ControlFillColorSecondaryBrush" Color="#E7E8EB"/>
+            <SolidColorBrush x:Key="ControlFillColorTertiaryBrush" Color="#F1F1F3"/>
+            <SolidColorBrush x:Key="ControlFillColorDisabledBrush" Color="#FDFDFE"/>
+            <SolidColorBrush x:Key="ControlElevationBorderBrush" Color="#818A98"/>
+            <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#ADB3BC"/>
+
+            <StaticResource x:Key="ButtonBackground" ResourceKey="ControlFillColorDefaultBrush" />
+            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush" />
+            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush" />
+            <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush" />
+            <StaticResource x:Key="ButtonBorderBrush" ResourceKey="ControlElevationBorderBrush" />
+            <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush" />
+            <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
+            <StaticResource x:Key="ButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush" />
+            
+            <StaticResource x:Key="RepeatButtonBackground" ResourceKey="ControlFillColorDefaultBrush" />
+            <StaticResource x:Key="RepeatButtonBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush" />
+            <StaticResource x:Key="RepeatButtonBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush" />
+            <StaticResource x:Key="RepeatButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush" />
+            <StaticResource x:Key="RepeatButtonBorderBrush" ResourceKey="ControlElevationBorderBrush" />
+            <StaticResource x:Key="RepeatButtonBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush" />
+            <StaticResource x:Key="RepeatButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
+            <StaticResource x:Key="RepeatButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
             <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="#25282C"/>
-            <SolidColorBrush x:Key="ButtonBackground" Color="#3E434B"/>
-            <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#484E58"/>
-            <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#3A3F47"/>
-            <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="#2C3035"/>
-            <SolidColorBrush x:Key="ButtonBorderBrush" Color="#6B7584"/>
-            <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#6B7584"/>
-            <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#555D69"/>
-            <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="#3A3F46"/>
-            <StaticResource x:Key="RepeatButtonBackground" ResourceKey="ButtonBackground"/>
-            <StaticResource x:Key="RepeatButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
-            <StaticResource x:Key="RepeatButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
-            <StaticResource x:Key="RepeatButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
-            <StaticResource x:Key="RepeatButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
-            <StaticResource x:Key="RepeatButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrushPointerOver"/>
-            <StaticResource x:Key="RepeatButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
-            <StaticResource x:Key="RepeatButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
+
+            <SolidColorBrush x:Key="ControlFillColorDefaultBrush" Color="#3E434B"/>
+            <SolidColorBrush x:Key="ControlFillColorSecondaryBrush" Color="#484E58"/>
+            <SolidColorBrush x:Key="ControlFillColorTertiaryBrush" Color="#3A3F47"/>
+            <SolidColorBrush x:Key="ControlFillColorDisabledBrush" Color="#2C3035"/>
+            <SolidColorBrush x:Key="ControlElevationBorderBrush" Color="#6B7584"/>
+            <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#555D69"/>
+
+            <StaticResource x:Key="ButtonBackground" ResourceKey="ControlFillColorDefaultBrush" />
+            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush" />
+            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush" />
+            <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush" />
+            <StaticResource x:Key="ButtonBorderBrush" ResourceKey="ControlElevationBorderBrush" />
+            <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush" />
+            <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
+            <StaticResource x:Key="ButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush" />
+
+            <StaticResource x:Key="RepeatButtonBackground" ResourceKey="ControlFillColorDefaultBrush" />
+            <StaticResource x:Key="RepeatButtonBackgroundPointerOver" ResourceKey="ControlFillColorSecondaryBrush" />
+            <StaticResource x:Key="RepeatButtonBackgroundPressed" ResourceKey="ControlFillColorTertiaryBrush" />
+            <StaticResource x:Key="RepeatButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush" />
+            <StaticResource x:Key="RepeatButtonBorderBrush" ResourceKey="ControlElevationBorderBrush" />
+            <StaticResource x:Key="RepeatButtonBorderBrushPointerOver" ResourceKey="ControlElevationBorderBrush" />
+            <StaticResource x:Key="RepeatButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
+            <StaticResource x:Key="RepeatButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
     <CornerRadius x:Key="ControlCornerRadius">8,8,8,8</CornerRadius>

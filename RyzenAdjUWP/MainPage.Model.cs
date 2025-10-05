@@ -79,7 +79,34 @@ namespace RyzenAdjUWP
 				}
 			}
 		}
-		public event PropertyChangedEventHandler PropertyChanged;
+		public bool AutoStart
+		{
+			get { lock (_base) { return _base.autoStart; } }
+			set
+			{
+                lock (_base)
+                {
+					if (_base.autoStart != value)
+					{
+						_base.autoStart = value;
+						_base.Notify("AutoStart");
+						Backend.Instance.Send($"autostart {value}");
+					}
+				}
+			}
+        }
+        public void SetAutoStartVar(bool value)
+        {
+            lock (_base)
+            {
+                if (_base.autoStart != value)
+                {
+                    _base.autoStart = value;
+                    _base.Notify("AutoStart");
+                }
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
 		public async Task Notify(string propertyName)
 		{
@@ -103,9 +130,10 @@ namespace RyzenAdjUWP
 		public double tdp = 30;
 		public double tdpMax = 100;
 		public double tdpMin = 0;
+		public bool autoStart = false;
 		public bool isConnected = false;
 
-		private List<MainPageModelWrapper> _wrappers = new List<MainPageModelWrapper>();
+        private List<MainPageModelWrapper> _wrappers = new List<MainPageModelWrapper>();
 
 		public MainPageModelWrapper GetWrapper(CoreDispatcher dispatcher)
 		{

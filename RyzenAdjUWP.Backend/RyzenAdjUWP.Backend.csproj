@@ -14,6 +14,7 @@
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,7 +27,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoStart.cs" />
     <Compile Include="Communication.cs" />
     <Compile Include="Handler.cs" />
     <Compile Include="Libraries\libryzenadj.cs" />
@@ -84,6 +85,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="RyzenAdj.cs" />
     <Compile Include="Tray.cs" />
@@ -108,12 +114,19 @@
     <PackageReference Include="Microsoft.Windows.SDK.Contracts">
       <Version>10.0.26100.6584</Version>
     </PackageReference>
+    <PackageReference Include="TaskScheduler">
+      <Version>2.12.2</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Libraries\inpoutx64.dll" TargetPath="inpoutx64.dll" />
-    <Content Include="Libraries\WinRing0x64.dll" TargetPath="WinRing0x64.dll" />
-    <Content Include="Libraries\WinRing0x64.sys" TargetPath="WinRing0x64.sys" />
-    <Content Include="Libraries\libryzenadj.dll" TargetPath="libryzenadj.dll" />
+    <Content Include="Libraries\inpoutx64.dll" TargetPath="inpoutx64.dll" CopyToOutputDirectory="IfDifferent" />
+    <Content Include="Libraries\WinRing0x64.dll" TargetPath="WinRing0x64.dll" CopyToOutputDirectory="IfDifferent" />
+    <Content Include="Libraries\WinRing0x64.sys" TargetPath="WinRing0x64.sys" CopyToOutputDirectory="IfDifferent" />
+    <Content Include="Libraries\libryzenadj.dll" TargetPath="libryzenadj.dll" CopyToOutputDirectory="IfDifferent" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Resources\TrayIcon.ico" />
   </ItemGroup>
   <ItemGroup>

@@ -18,31 +18,30 @@ namespace RyzenAdjUWP.Backend
         public EventHandler DisconnectedEvent {  get; set; }
         public EventHandler<string> ReceivedEvent { get; set; }
 
-        public Communication()
+        public Communication(string packageSid)
         {
-            var pipeName = $"Sessions\\{Process.GetCurrentProcess().SessionId}\\AppContainerNamedObjects\\{ApplicationData.Current.LocalSettings.Values["PackageSid"]}\\RyzenAdjPipe";
-            Debug.WriteLine($"[Connection] Pipe name: {pipeName}");
+            Console.WriteLine($"[Connection] Package SID: {packageSid}");
+            var pipeName = $"Sessions\\{Process.GetCurrentProcess().SessionId}\\AppContainerNamedObjects\\{packageSid}\\RyzenAdjPipe";
+            Console.WriteLine($"[Connection] Pipe name: {pipeName}");
             
             _server = new NamedPipeServerStream(
                 pipeName,
                 PipeDirection.InOut, 1,
                 PipeTransmissionMode.Message,
-                PipeOptions.Asynchronous, 128, 128, GetPipeSecurity());
+                PipeOptions.Asynchronous, 128, 128, GetPipeSecurity(packageSid));
             _reader = new StreamReader(_server);
             _writer = new StreamWriter(_server);
         }
 
-        private static PipeSecurity GetPipeSecurity()
+        private static PipeSecurity GetPipeSecurity(string packageSid)
         {
             var ps = new PipeSecurity();
-            Debug.WriteLine($"[Security] Package SID: {ApplicationData.Current.LocalSettings.Values["PackageSid"] as string}");
             var clientRule = new PipeAccessRule(
-                new SecurityIdentifier(ApplicationData.Current.LocalSettings.Values["PackageSid"] as string),
+                new SecurityIdentifier(packageSid),
                 PipeAccessRights.ReadWrite,
                 AccessControlType.Allow);
-            Debug.WriteLine($"[Security] User SID: {ApplicationData.Current.LocalSettings.Values["UserSid"] as string}");
             var ownerRule = new PipeAccessRule(
-                new SecurityIdentifier(ApplicationData.Current.LocalSettings.Values["UserSid"] as string),
+                WindowsIdentity.GetCurrent().User,
                 PipeAccessRights.FullControl,
                 AccessControlType.Allow);
             ps.AddAccessRule(clientRule);
@@ -52,9 +51,9 @@ namespace RyzenAdjUWP.Backend
 
         public void Run()
         {
-            Debug.WriteLine($"[Connection] Waiting for connection");
+            Console.WriteLine($"[Connection] Waiting for connection");
             _server.WaitForConnection();
-            Debug.WriteLine($"[Connection] Connection established");
+            Console.WriteLine($"[Connection] Connection established");
             ConnectedEvent?.Invoke(this, null);
 
             while (true)
@@ -62,14 +61,14 @@ namespace RyzenAdjUWP.Backend
                 if (!_server.IsConnected)
                 {
                     _server.Disconnect();
-                    Debug.WriteLine("[Connection] Disconnected, waiting for reconnecting");
+                    Console.WriteLine("[Connection] Disconnected, waiting for reconnecting");
                     DisconnectedEvent?.Invoke(this, null);
                     _server.WaitForConnection();
-                    Debug.WriteLine("[Connection] Reconnected");
+                    Console.WriteLine("[Connection] Reconnected");
                     ConnectedEvent?.Invoke(this, null);
                 }
                 string message = _reader.ReadLine();
-                Debug.WriteLine($"[Connection] Received: {message}");
+                Console.WriteLine($"[Connection] Received: {message}");
                 if (!string.IsNullOrEmpty(message))
                     ReceivedEvent?.Invoke(this, message);
             }
@@ -80,7 +79,7 @@ namespace RyzenAdjUWP.Backend
             if (!_server.IsConnected || message == null)
                 return;
 
-            Debug.WriteLine($"[Connection] Sent: {message}");
+            Console.WriteLine($"[Connection] Sent: {message}");
             _writer.WriteLine(message);
             _writer.Flush();
         }

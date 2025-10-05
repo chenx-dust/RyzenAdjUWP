@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 
 namespace RyzenAdjUWP
 {
-
     public class WattConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

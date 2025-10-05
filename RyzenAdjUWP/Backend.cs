@@ -38,7 +38,6 @@ namespace RyzenAdjUWP
         public static async Task LaunchBackend()
         {
             ApplicationData.Current.LocalSettings.Values["PackageSid"] = WebAuthenticationBroker.GetCurrentApplicationCallbackUri().Host.ToUpper();
-            ApplicationData.Current.LocalSettings.Values["UserSid"] = WindowsIdentity.GetCurrent().Owner.Value;
             await FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync();
         }
 

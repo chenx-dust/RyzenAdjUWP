@@ -5,4 +5,7 @@
     <x:Double x:Key="FontSize14">14</x:Double>
     <x:Double x:Key="FontSize16">16</x:Double>
     <x:Double x:Key="NotConnectedFontSize">56</x:Double>
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ms-appx:///Styles/ToggleSwitch_XboxStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

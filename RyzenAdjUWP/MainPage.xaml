@@ -8,13 +8,11 @@
     xmlns:Custom="using:Microsoft.UI.Xaml.Controls.Primitives"
     x:Class="RyzenAdjUWP.MainPage"
     mc:Ignorable="d"
+    d:Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     d:DesignWidth="400"
     d:DesignHeight="400"
-    d:DataContext="{d:DesignInstance Type=local:MainPageModel}"
-    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    UseSystemFocusVisuals="True"
-    IsFocusEngagementEnabled="True">
+    d:DataContext="{d:DesignInstance Type=local:MainPageModelWrapper}"
+    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
 
     <Page.Resources>
         <ResourceDictionary>
@@ -30,35 +28,49 @@
         </ResourceDictionary>
     </Page.Resources>
 
+
     <Grid Padding="20">
-        <StackPanel x:Name="BackendPanel" VerticalAlignment="Center" Padding="0,0,0,40" Spacing="8">
+        <StackPanel x:Name="BackendPanel" VerticalAlignment="Center" Padding="0,0,0,40" Spacing="8" Visibility="Collapsed">
             <FontIcon FontSize="{ThemeResource NotConnectedFontSize}" Margin="0,4" Glyph="&#57722;"/>
             <TextBlock HorizontalTextAlignment="Center" FontSize="{ThemeResource FontSize14}">RyzenAdjUWP Backend Not Connected</TextBlock>
             <Button x:Name="LaunchBackendButton" HorizontalAlignment="Stretch" VerticalAlignment="Center" Click="LaunchBackendButton_OnClick" FontWeight="SemiBold" FontSize="{ThemeResource FontSize16}">
                 Launch Backend
             </Button>
         </StackPanel>
-        <StackPanel x:Name="MainPanel" Spacing="5">
-            <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="Power Limit" FontSize="{ThemeResource FontSize16}" FontWeight="Bold"/>
-            <Slider x:Name="TdpSlider" Value="{Binding Tdp, Mode=TwoWay}" Maximum="{Binding TdpMax}" Minimum="{Binding TdpMin}"/>
-            <Grid Margin="0,5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <RepeatButton Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,5,0" Content="-5" FontSize="{ThemeResource FontSize14}"
+        <StackPanel x:Name="MainPanel" Spacing="15">
+            <StackPanel Spacing="5">
+                <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="Power Limit" FontSize="{ThemeResource FontSize16}" FontWeight="Bold"/>
+                <Slider x:Name="TdpSlider" Value="{Binding Tdp, Mode=TwoWay}" Maximum="{Binding TdpMax}" Minimum="{Binding TdpMin}"/>
+                <Grid Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <RepeatButton Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,5,0" Content="-5" FontSize="{ThemeResource FontSize14}"
                     Command="{StaticResource SliderDecrease5}" CommandParameter="{Binding ElementName=TdpSlider}"/>
-                <RepeatButton Grid.Column="1" HorizontalAlignment="Stretch" Margin="5,0" Content="-1" FontSize="{ThemeResource FontSize14}"
+                    <RepeatButton Grid.Column="1" HorizontalAlignment="Stretch" Margin="5,0" Content="-1" FontSize="{ThemeResource FontSize14}"
                     Command="{StaticResource SliderDecrease1}" CommandParameter="{Binding ElementName=TdpSlider}"/>
-                <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{ThemeResource FontSize14}" Text="{Binding Converter={StaticResource WattConverter}, Path=Tdp}"/>
-                <RepeatButton Grid.Column="3" HorizontalAlignment="Stretch" Margin="5,0" Content="+1" FontSize="{ThemeResource FontSize14}"
+                    <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{ThemeResource FontSize14}" Text="{Binding Converter={StaticResource WattConverter}, Path=Tdp}"/>
+                    <RepeatButton Grid.Column="3" HorizontalAlignment="Stretch" Margin="5,0" Content="+1" FontSize="{ThemeResource FontSize14}"
                     Command="{StaticResource SliderIncrease1}" CommandParameter="{Binding ElementName=TdpSlider}"/>
-                <RepeatButton Grid.Column="4" HorizontalAlignment="Stretch" Margin="5,0,0,0" Content="+5" FontSize="{ThemeResource FontSize14}"
+                    <RepeatButton Grid.Column="4" HorizontalAlignment="Stretch" Margin="5,0,0,0" Content="+5" FontSize="{ThemeResource FontSize14}"
                     Command="{StaticResource SliderIncrease5}" CommandParameter="{Binding ElementName=TdpSlider}"/>
-            </Grid>
+                </Grid>
+            </StackPanel>
+            <StackPanel Spacing="5">
+                <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="Settings" FontSize="{ThemeResource FontSize16}" FontWeight="Bold"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Start Backend Automatically" FontSize="{ThemeResource FontSize14}"/>
+                    <ToggleSwitch Grid.Column="1" x:Name="AutoStartToggle" IsOn="{Binding AutoStart, Mode=TwoWay}"/>
+                </Grid>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>

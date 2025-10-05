@@ -3,6 +3,7 @@ using System;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace RyzenAdjUWP
@@ -75,7 +76,7 @@ namespace RyzenAdjUWP
         private void ConnectedInitialize()
         {
             _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => PanelSwitch(true));
-            Backend.Instance.Send("get-tdp-limit");
+            Backend.Instance.Send("init");
         }
 
         private void PanelSwitch(bool isBackendAlive)
@@ -114,6 +115,9 @@ namespace RyzenAdjUWP
                     break;
                 case "tdp":
                     _model.SetTdpVar(double.Parse(args[1]));
+                    break;
+                case "autostart":
+                    _model.SetAutoStartVar(bool.Parse(args[1]));
                     break;
             }
         }
